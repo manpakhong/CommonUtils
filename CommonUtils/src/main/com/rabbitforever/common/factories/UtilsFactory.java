@@ -8,7 +8,7 @@ import com.rabbitforever.common.utils.CommonUtils;
 import com.rabbitforever.common.utils.DateUtils;
 import com.rabbitforever.common.utils.FileUtils;
 import com.rabbitforever.common.utils.MiscUtils;
-
+ 
 public class UtilsFactory {
 	private final static Logger logger = LoggerFactory.getLogger(getClassName());
 	private static UtilsFactory generalUtilsFactory;
