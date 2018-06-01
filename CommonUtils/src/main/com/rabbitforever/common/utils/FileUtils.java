@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -209,27 +208,27 @@ public class FileUtils {
 		}
 		return stringList;
 	}
-	public byte[] readFileToByteArray(String fileName) throws Exception {
-		InputStream inputStream = null;
-		byte[] byteArray = null;
-		try {
-			inputStream = new FileInputStream(fileName);
-			byteArray = IOUtils.toByteArray(inputStream);
-		} catch (Exception e) {
-			logger.error(getClassName() + ".readFileToByteArray() - fileName=" + fileName, e);
-			throw e;
-		} finally {
-			try {
-				if (inputStream != null){
-					inputStream.close();
-				}
-			} catch (IOException ex) {
-				logger.error(getClassName() + ".readFileToByteArray() - fileName=" + fileName, ex);
-				throw ex;
-			}
-		}
-		return byteArray;
-	}
+//	public byte[] readFileToByteArray(String fileName) throws Exception {
+//		InputStream inputStream = null;
+//		byte[] byteArray = null;
+//		try {
+//			inputStream = new FileInputStream(fileName);
+//			byteArray = IOUtils.toByteArray(inputStream);
+//		} catch (Exception e) {
+//			logger.error(getClassName() + ".readFileToByteArray() - fileName=" + fileName, e);
+//			throw e;
+//		} finally {
+//			try {
+//				if (inputStream != null){
+//					inputStream.close();
+//				}
+//			} catch (IOException ex) {
+//				logger.error(getClassName() + ".readFileToByteArray() - fileName=" + fileName, ex);
+//				throw ex;
+//			}
+//		}
+//		return byteArray;
+//	}
 //	public List<String> readFromFile(String fileName) throws Exception {
 //		BufferedReader br = null;
 //		List<String> stringList = new ArrayList<String>();
