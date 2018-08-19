@@ -10,12 +10,19 @@ import org.slf4j.LoggerFactory;
 
 public class DateUtils {
 	private final Logger logger = LoggerFactory.getLogger(DateUtils.class);
-
+	private static DateUtils dateUtils;
 	private String getClassName() {
 		return this.getClass().getName();
 	}
 
-	public DateUtils() {
+	private DateUtils() {
+	}
+	
+	public static DateUtils getInstance() {
+		if (dateUtils == null) {
+			dateUtils = new DateUtils();
+		}
+		return dateUtils;
 	}
 	public Date parseDateStringToDate(String dateString_yyyyMMdd) throws Exception{
 		Date date = null;

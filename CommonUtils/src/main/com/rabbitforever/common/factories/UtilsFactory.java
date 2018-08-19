@@ -36,7 +36,7 @@ public class UtilsFactory {
 	}
 	public MiscUtils getInstanceOfMiscUtils() {
 		if (miscUtils == null) {
-			miscUtils = new MiscUtils();
+			miscUtils = MiscUtils.getInstance();
 		}
 		return miscUtils;
 	}
@@ -48,13 +48,13 @@ public class UtilsFactory {
 	}
 	public DateUtils getInstanceOfDateUtils() {
 		if (dateUtils == null) {
-			dateUtils = new DateUtils();
+			dateUtils = DateUtils.getInstance();
 		}
 		return dateUtils;
 	}
 	public FileUtils getInstanceOfFileUtils() {
 		if (fileUtils == null) {
-			fileUtils = new FileUtils();
+			fileUtils = FileUtils.getInstance();
 		}
 		return fileUtils;
 	}

@@ -16,10 +16,17 @@ public class FileUtils {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 //	private String DATASET_FOLDER;
 //	private SysProperties sysProperties;
+	private static FileUtils fileUtils;
 	private String getClassName() {
 		return this.getClass().getName();
 	}
-	public FileUtils() {
+	public static FileUtils getInstance() {
+		if (fileUtils == null) {
+			fileUtils = new FileUtils();
+		}
+		return fileUtils;
+	}
+	private FileUtils() {
 //		sysProperties = new SysProperties();
 //		DATASET_FOLDER =sysProperties.getTestFolderRoot();
 	}
