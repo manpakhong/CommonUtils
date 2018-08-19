@@ -24,7 +24,7 @@ public class UtilsFactory {
 	public CommonUtils getInstanceOfCommonUtils()
 	{
 		if (commonUtils == null) {
-			commonUtils = new CommonUtils();
+			commonUtils = CommonUtils.getInstance();
 		}
 		return commonUtils;
 	}
@@ -42,7 +42,7 @@ public class UtilsFactory {
 	}
 	public CalendarUtils getInstanceOfCalendarUtils() {
 		if (calendarUtils == null) {
-			calendarUtils = new CalendarUtils();
+			calendarUtils = CalendarUtils.getInstanceOfCalendarUtils(commonUtils);
 		}
 		return calendarUtils;
 	}

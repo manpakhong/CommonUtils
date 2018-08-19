@@ -27,10 +27,16 @@ public class CommonUtils {
 	private final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 //	private UtilsFactory utilsFactory;
 //	private CalendarUtils calendarUtils;
-	
-	public CommonUtils() {
+	private static CommonUtils commonUtils;
+	private CommonUtils() {
 //		utilsFactory = UtilsFactory.getInstance();
 //		calendarUtils = utilsFactory.getInstanceOfCalendarUtils();
+	}
+	public static CommonUtils getInstance() {
+		if (commonUtils == null) {
+			commonUtils = new CommonUtils();
+		}
+		return commonUtils;
 	}
 	private String getClassName() {
 		String className = this.getClass().getName();

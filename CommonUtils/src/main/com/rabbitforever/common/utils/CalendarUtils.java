@@ -3,10 +3,13 @@ package com.rabbitforever.common.utils;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,21 +21,57 @@ public class CalendarUtils {
 	private final String SIMPLE_DATE_TIME_FORMAT_STRING = "yyyy-MM-dd HH:mm:ss";
 	private final String SIMPLE_DATE_TIME_FORMAT_WITH_UTC_TZ_OFFSET_STRING = "yyyy-MM-dd HH:mm:ss Z";
 	private final String UTC_TIMEZONE_STRING = "Etc/UTC";
-	private UtilsFactory utilsFactory;
-	private CommonUtils commonUtils;
+	private static CommonUtils commonUtils;
+	private static CalendarUtils calendarUtils;
 	private final Logger logger = LoggerFactory.getLogger(getClassName());
 
-	public CalendarUtils() {
-		utilsFactory = UtilsFactory.getInstance();
-		commonUtils = utilsFactory.getInstanceOfCommonUtils();
+	private CalendarUtils() {
+
 	}
 	
-
+	public static CalendarUtils getInstanceOfCalendarUtils(CommonUtils commonUtils) {
+		CalendarUtils.commonUtils = commonUtils;
+		if (calendarUtils == null) {
+			calendarUtils = new CalendarUtils();
+		}
+		return calendarUtils;
+	}
 	
 	private String getClassName() {
 		return this.getClass().getName();
 	}
 
+	public Calendar parseDateStringToMinimumOfTheDate(String dateString_yyyyMMdd) throws Exception {
+		Calendar cal = null;
+		String pattern = "\\w{4}\\w{2}\\w{2}";
+		try {
+			cal = getMaxUtcCalendarToday();
+			List<String> matchStringList = regMatch(dateString_yyyyMMdd, pattern);
+		}catch (Exception e) {
+			logger.error(getClassName() + ".parseDateStringToBeginningOfTheDate()- dateString_yyyyMMdd=" + dateString_yyyyMMdd, e);
+			throw e;
+		}
+		return cal;
+	}
+	
+	private List<String> regMatch(String sourceString, String patternString) throws Exception{
+		List<String> matchStrList = null;
+		Pattern pattern = null;
+		Matcher matcher = null;
+		try {
+		matchStrList = new ArrayList<String>();
+		pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+		matcher = pattern.matcher(sourceString);
+		while(matcher.find()){
+			matchStrList.add(matcher.group());
+		}
+		} catch (Exception e) {
+			logger.error(getClassName() + ".regMatch() - sourceString=" + sourceString + ",patternString=" + patternString, e);
+			throw e;
+		}
+		return matchStrList;
+	}
+	
 	public void recomputeCalendar(Calendar cal) throws Exception {
 		try {
 			String refreshCal = "refreshCal - M: " + cal.get(Calendar.DAY_OF_MONTH) + "H:"
