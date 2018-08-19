@@ -43,10 +43,13 @@ public class CalendarUtils {
 
 	public Calendar parseDateStringToMinimumOfTheDate(String dateString_yyyyMMdd) throws Exception {
 		Calendar cal = null;
-		String pattern = "\\w{4}\\w{2}\\w{2}";
+		String pattern = "(\\d{4})(\\d{2})(\\d{2})";
 		try {
 			cal = getMaxUtcCalendarToday();
 			List<String> matchStringList = regMatch(dateString_yyyyMMdd, pattern);
+			for (int i=0; i< matchStringList.size();i++) {
+				
+			}
 		}catch (Exception e) {
 			logger.error(getClassName() + ".parseDateStringToBeginningOfTheDate()- dateString_yyyyMMdd=" + dateString_yyyyMMdd, e);
 			throw e;

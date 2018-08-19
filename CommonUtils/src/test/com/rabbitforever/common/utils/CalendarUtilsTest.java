@@ -31,7 +31,8 @@ public class CalendarUtilsTest {
 		try {
 			UtilsFactory utilsFactory = UtilsFactory.getInstance();
 			DateUtils dateUtils = utilsFactory.getInstanceOfDateUtils();
-			dateUtils.parseDateStringToDate("20180808");
+			CalendarUtils calendarUtils = utilsFactory.getInstanceOfCalendarUtils();
+			calendarUtils.parseDateStringToMinimumOfTheDate("20180808");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
