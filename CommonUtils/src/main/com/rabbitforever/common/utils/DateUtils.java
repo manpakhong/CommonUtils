@@ -17,7 +17,16 @@ public class DateUtils {
 
 	public DateUtils() {
 	}
-
+	public Date parseDateStringToDate(String dateString_yyyyMMdd) throws Exception{
+		Date date = null;
+		try {
+			date = new SimpleDateFormat("yyyyMMdd").parse(dateString_yyyyMMdd);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".parseDateStringToDate()- dateString_yyyyMMdd=" + dateString_yyyyMMdd, e);
+			throw e;
+		}
+		return date;
+	}
 	public String getDateTimeString() throws Exception {
 		String dateTimeString = null;
 		DateFormat formatter = null;
