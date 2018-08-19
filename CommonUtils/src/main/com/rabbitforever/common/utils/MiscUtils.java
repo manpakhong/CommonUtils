@@ -7,7 +7,17 @@ import org.slf4j.LoggerFactory;
 
 public class MiscUtils {
 	private final Logger logger = LoggerFactory.getLogger(getClassName());
-
+	private static MiscUtils miscUtils;
+	
+	public static MiscUtils getInstance() {
+		if (miscUtils == null) {
+			miscUtils = new MiscUtils();
+		}
+		return miscUtils;
+	}
+	private MiscUtils() {
+		
+	}
 	private String getClassName() {
 		return this.getClass().getName();
 	}

@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.rabbitforever.common.factories.UtilsFactory;
+
 public class CalendarUtilsTest {
 
 	@BeforeClass
@@ -29,7 +31,9 @@ public class CalendarUtilsTest {
 	@Test
 	public void testParseDateStringToMinimumOfTheDate() {
 		try {
-			CalendarUtils utils = CalendarUtils.getInstanceOfCalendarUtils(null);
+			UtilsFactory utilsFactory = UtilsFactory.getInstance();
+			DateUtils dateUtils = utilsFactory.getInstanceOfDateUtils();
+			dateUtils.parseDateStringToDate("20180808");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
