@@ -28,7 +28,7 @@ public class CalendarUtils {
 	private CalendarUtils() {
 
 	}
-	
+
 	public static CalendarUtils getInstanceOfCalendarUtils(CommonUtils commonUtils) {
 		CalendarUtils.commonUtils = commonUtils;
 		if (calendarUtils == null) {
@@ -36,45 +36,50 @@ public class CalendarUtils {
 		}
 		return calendarUtils;
 	}
-	
+
 	private String getClassName() {
 		return this.getClass().getName();
 	}
 
 	public Calendar parseDateStringToMinimumOfTheDate(String dateString_yyyyMMdd) throws Exception {
 		Calendar cal = null;
-		String pattern = "(\\d{4})(\\d{2})(\\d{2})";
+		String pattern = "^(\\d{4})(\\d{2})(\\d{2})$";
 		try {
 			cal = getMaxUtcCalendarToday();
 			List<String> matchStringList = regMatch(dateString_yyyyMMdd, pattern);
-			for (int i=0; i< matchStringList.size();i++) {
-				
+			for (int i = 0; i < matchStringList.size(); i++) {
+
 			}
-		}catch (Exception e) {
-			logger.error(getClassName() + ".parseDateStringToBeginningOfTheDate()- dateString_yyyyMMdd=" + dateString_yyyyMMdd, e);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".parseDateStringToBeginningOfTheDate()- dateString_yyyyMMdd="
+					+ dateString_yyyyMMdd, e);
 			throw e;
 		}
 		return cal;
 	}
-	
-	private List<String> regMatch(String sourceString, String patternString) throws Exception{
+
+	private List<String> regMatch(String sourceString, String patternString) throws Exception {
 		List<String> matchStrList = null;
 		Pattern pattern = null;
 		Matcher matcher = null;
 		try {
-		matchStrList = new ArrayList<String>();
-		pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
-		matcher = pattern.matcher(sourceString);
-		while(matcher.find()){
-			matchStrList.add(matcher.group());
-		}
+			matchStrList = new ArrayList<String>();
+			pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
+			matcher = pattern.matcher(sourceString);
+		      if(matcher.find()) {
+		          for(int i = 1; i <= matcher.groupCount(); i++) {
+		            matchStrList.add(matcher.group(i));
+		          }
+		      }
 		} catch (Exception e) {
-			logger.error(getClassName() + ".regMatch() - sourceString=" + sourceString + ",patternString=" + patternString, e);
+			logger.error(
+					getClassName() + ".regMatch() - sourceString=" + sourceString + ",patternString=" + patternString,
+					e);
 			throw e;
 		}
 		return matchStrList;
 	}
-	
+
 	public void recomputeCalendar(Calendar cal) throws Exception {
 		try {
 			String refreshCal = "refreshCal - M: " + cal.get(Calendar.DAY_OF_MONTH) + "H:"
@@ -570,7 +575,7 @@ public class CalendarUtils {
 		}
 	}
 
-	public void trimCalendar2Maximum(Calendar cal)  throws Exception{
+	public void trimCalendar2Maximum(Calendar cal) throws Exception {
 		try {
 			if (cal != null) {
 				cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
@@ -586,7 +591,7 @@ public class CalendarUtils {
 		}
 	}
 
-	public Integer changeDate2Unixtime(Date date) throws Exception{
+	public Integer changeDate2Unixtime(Date date) throws Exception {
 		Integer rtnUnixtime = null;
 		try {
 			if (date != null) {
