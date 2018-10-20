@@ -34,6 +34,20 @@ public class DateUtils {
 		}
 		return date;
 	}
+	public String getDateString() throws Exception {
+		String dateTimeString = null;
+		DateFormat formatter = null;
+		Date date = null;
+		try {
+			formatter = new SimpleDateFormat("yyyyMMdd");
+			date = new Date();
+			dateTimeString = formatter.format(date);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".getDateString()", e);
+			throw e;
+		}
+		return dateTimeString;
+	}
 	public String getDateTimeString() throws Exception {
 		String dateTimeString = null;
 		DateFormat formatter = null;
@@ -47,6 +61,29 @@ public class DateUtils {
 			throw e;
 		}
 		return dateTimeString;
+	}
+	public String getTodayDisplayDateString() throws Exception {
+		String dateString = null;
+		DateFormat formatter = null;
+		try {
+			dateString = convertDateTimeToDisplayDateString(new Date());
+		} catch (Exception e) {
+			logger.error(getClassName() + ".getTodayDateString() ", e);
+			throw e;
+		}
+		return dateString;
+	}
+	public String convertDateTimeToDisplayDateString(Date date) throws Exception {
+		String dateString = null;
+		DateFormat formatter = null;
+		try {
+			formatter = new SimpleDateFormat("dd/MM/yyyy");
+			dateString = formatter.format(date);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".convertDateTimeToDisplayDateString() - date=" + date, e);
+			throw e;
+		}
+		return dateString;
 	}
 	public String convertDateTimeToDisplayDateTimeString(Date date) throws Exception {
 		String dateString = null;
