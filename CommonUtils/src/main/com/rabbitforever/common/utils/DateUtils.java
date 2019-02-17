@@ -34,7 +34,31 @@ public class DateUtils {
 		}
 		return date;
 	}
-	public String getDateString() throws Exception {
+	public Date parseDateTimeStringToDate(String dateString_yyyyMMdd_HHmmss) throws Exception{
+		Date date = null;
+		DateFormat formatter = null;
+		try {
+			formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
+			date = formatter.parse(dateString_yyyyMMdd_HHmmss);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".parseDateStringToDate()- dateString_yyyyMMdd_HHmmss=" + dateString_yyyyMMdd_HHmmss, e);
+			throw e;
+		} finally {
+			formatter = null;
+		}
+		return date;
+	}
+	public Date parseDateTimeDetailStringToDate(String dateString_yyyyMMdd_HHmmss_SSS) throws Exception{
+		Date date = null;
+		try {
+			date = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS").parse(dateString_yyyyMMdd_HHmmss_SSS);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".parseDateStringToDate()- dateString_yyyyMMdd_HHmmss_SSS=" + dateString_yyyyMMdd_HHmmss_SSS, e);
+			throw e;
+		}
+		return date;
+	}
+	public String getDateParamString() throws Exception {
 		String dateTimeString = null;
 		DateFormat formatter = null;
 		Date date = null;
@@ -48,7 +72,7 @@ public class DateUtils {
 		}
 		return dateTimeString;
 	}
-	public String getDateTimeString() throws Exception {
+	public String getDateTimeDetailParamString() throws Exception {
 		String dateTimeString = null;
 		DateFormat formatter = null;
 		Date date = null;
@@ -62,9 +86,23 @@ public class DateUtils {
 		}
 		return dateTimeString;
 	}
+	public String getDateTimeSecondParamString() throws Exception {
+		String dateTimeString = null;
+		DateFormat formatter = null;
+		Date date = null;
+		try {
+			formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
+			date = new Date();
+			dateTimeString = formatter.format(date);
+		} catch (Exception e) {
+			logger.error(getClassName() + ".getDateTimeString()", e);
+			throw e;
+		}
+		return dateTimeString;
+	}
 	public String getTodayDisplayDateString() throws Exception {
 		String dateString = null;
-		DateFormat formatter = null;
+
 		try {
 			dateString = convertDateTimeToDisplayDateString(new Date());
 		} catch (Exception e) {
@@ -82,6 +120,10 @@ public class DateUtils {
 		} catch (Exception e) {
 			logger.error(getClassName() + ".convertDateTimeToDisplayDateString() - date=" + date, e);
 			throw e;
+		} finally {
+			if (formatter != null) {
+				formatter = null;
+			}
 		}
 		return dateString;
 	}

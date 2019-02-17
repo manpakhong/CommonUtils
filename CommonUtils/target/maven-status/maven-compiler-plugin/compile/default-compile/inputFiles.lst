@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\utils\CommonUtils.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\utils\DateUtils.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\utils\FileUtils.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\utils\CalendarUtils.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\utils\MiscUtils.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\models\dtos\Dto.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\factories\UtilsFactory.java
-C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\common\models\dtos\CompressFileDto.java
-=======
 /Users/manpakhong/git/CommonUtils/CommonUtils/src/main/com/rabbitforever/common/utils/MiscUtils.java
 /Users/manpakhong/git/CommonUtils/CommonUtils/src/main/com/rabbitforever/common/utils/CommonUtils.java
 /Users/manpakhong/git/CommonUtils/CommonUtils/src/main/com/rabbitforever/common/utils/CalendarUtils.java
@@ -16,4 +6,3 @@ C:\Users\manpakhong\git\CommonUtils\CommonUtils\src\main\com\rabbitforever\commo
 /Users/manpakhong/git/CommonUtils/CommonUtils/src/main/com/rabbitforever/common/factories/UtilsFactory.java
 /Users/manpakhong/git/CommonUtils/CommonUtils/src/main/com/rabbitforever/common/utils/DateUtils.java
 /Users/manpakhong/git/CommonUtils/CommonUtils/src/main/com/rabbitforever/common/utils/FileUtils.java
->>>>>>> branch 'master' of https://github.com/manpakhong/CommonUtils.git
