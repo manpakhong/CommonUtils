@@ -1,11 +1,15 @@
 package com.rabbitforever.common.utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.InetAddress;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,16 +19,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rabbitforever.common.models.dtos.CompressFileDto;
-
 public class CommonUtils {
-	private final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
+	private final Logger logger = LoggerFactory.getLogger(getClassName());
+	private static final Integer EXTREME_LONG_STRING_LENGTH = 3000;
+	
+
 //	private UtilsFactory utilsFactory;
 //	private CalendarUtils calendarUtils;
 	private static CommonUtils commonUtils;
@@ -57,6 +60,29 @@ public class CommonUtils {
 		}
 	}
 	
+//	public <T> List<T> getFilteredList(List<T> list, Class<T> clazz, String filterStr) {
+//		List<T> returnList = new ArrayList<>();
+//		if (list != null && list.size() > 0) {
+//			if (clazz == ArcSurchincrementalEo.class) {				
+//				if (filterStr != null && !filterStr.isEmpty()) {
+//					returnList = list.stream().filter(eo -> filterStr.equals(((ArcSurchincrementalEo) eo).getRoomTypeCode())).collect(Collectors.toList());
+//				}
+//				if (returnList == null || returnList.size() == 0) {
+//					returnList = list.stream().filter(eo -> (((ArcSurchincrementalEo) eo).getRoomTypeCode() == null)).collect(Collectors.toList());
+//				}
+//			}
+//		}
+//		return returnList;
+//	}
+		
+	public Double getNumber(Double number) {
+		return (number == null) ? 0.0 : number; 
+	}
+	
+	public Integer getNumber(Integer number) {
+		return (number == null) ? 0 : number; 
+	}
+	
 	public boolean isNoDuplicationWithinArray(String [] strArray) throws Exception{
 		boolean noDuplication = true;
 		try{
@@ -71,7 +97,7 @@ public class CommonUtils {
 			}
 			
 		} catch (Exception e){
-			logger.error(getClassName() + ".splitByDelimited() - strArray=" + strArray, e);
+			logger.error(getClassName() + ".isNoDuplicationWithinArray() - strArray=" + strArray, e);
 			throw e;
 		}
 		return noDuplication;
@@ -208,6 +234,42 @@ public class CommonUtils {
 		}
 		return byteArray;
 	}
+	public Integer tryParseInteger(String str) throws Exception{
+		Integer rtnInteger = null;
+		try {
+			rtnInteger = Integer.parseInt(str);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+		return rtnInteger;
+	}
+	public Boolean tryParseBoolean(String str)  throws Exception{
+		Boolean rtnBoolean = null;
+		try{
+			rtnBoolean = Boolean.parseBoolean(str);
+		} catch (Exception e){
+			return null;
+		}
+		return rtnBoolean;
+	}
+	public Double tryParseDouble(String str)  throws Exception{
+		Double rtnDouble = null;
+		try{
+			rtnDouble = Double.parseDouble(str);
+		} catch (NumberFormatException e){
+			return null;
+		}
+		return rtnDouble;
+	}
+	public Long tryParseLong(String str)  throws Exception{
+		Long rtnLong = null;
+		try{
+			rtnLong = Long.parseLong(str);
+		} catch (NumberFormatException e){
+			return null;
+		}
+		return rtnLong;
+	}
 	public boolean isNumeric(String str){
 		try{
 			Double.parseDouble(str);
@@ -216,10 +278,15 @@ public class CommonUtils {
 		}
 		return true;
 	}
-	public BigDecimal number2BigDecimal(Number number){
+	public BigDecimal number2BigDecimal(Number number)  throws Exception{
 		BigDecimal rtnBigDecimal = null;
+		try {
 		if (number != null){
 			rtnBigDecimal = new BigDecimal(number.intValue());
+		}
+		} catch (Exception e) {
+			logger.error(getClassName() + ".number2BigDecimal() - number=" + number, e);
+			throw e;
 		}
 		return rtnBigDecimal;
 	}
@@ -400,32 +467,86 @@ public class CommonUtils {
 		}
 	    return (float) d;
 	}
-	public void compressBytes(ByteArrayOutputStream outByteArrayOutputStream, List<CompressFileDto>  compressFileDtoList) throws Exception {
-		ZipOutputStream zos = null;
+	public char[] convertClobToCharArray(Clob clob) throws Exception{
+//		char returnVal[] = null;
+		Reader r = null;
 		try{
-			zos = new ZipOutputStream(outByteArrayOutputStream);
-			zos.setLevel(ZipOutputStream.STORED);
-			for (int i = 0; i < compressFileDtoList.size(); i++) {
-				CompressFileDto compressFileDto = compressFileDtoList.get(i);
-				ByteArrayOutputStream baos = compressFileDto.getByteArrayOutputStream();
-				String fileName = compressFileDto.getFileName();
-				ZipEntry zipEntry = new ZipEntry(fileName);
-				zos.putNextEntry(zipEntry);
-				zos.write(baos.toByteArray());
-				zos.closeEntry();
+			if (clob != null) {
+				char clobVal[] = new char[(int) clob.length()];
+			    r = clob.getCharacterStream();
+			    r.read(clobVal);
+			    return clobVal;
 			}
-			
 		} catch (Exception e){
-			logger.error(getClassName() + ".compressBytes()");
+			logger.error(getClassName() + ".convertClobToCharArray() - clob =" + clob, e);
 			throw e;
 		} finally {
-			if (zos != null) {
-				zos.close();
-				
+			if (r != null) {
+				r.close();
+				r = null;
 			}
 		}
-		
+	    return null;
 	}
+	public byte[] convertBlogToByteArray(Blob blob) throws Exception{
+		InputStream blobIs = null;
+		try{
+			if (blob != null) {
+				byte blobVal[] = new byte[(int) blob.length()];
+			    blobIs = blob.getBinaryStream();
+			    blobIs.read(blobVal);
+			    return blobVal;
+			}
+		} catch (Exception e){
+			logger.error(getClassName() + ".convertClobToCharArray() - blob =" + blob, e);
+			throw e;
+		} finally {
+			if (blobIs != null) {
+				blobIs.close();
+				blobIs = null;
+			}
+		}
+	    return null;
+	}
+	
+	public String shortenLongStringByTrimHead(String s) throws Exception{
+		try{
+			if (s != null && s.length() > EXTREME_LONG_STRING_LENGTH) {
+				s = s.substring(s.length() - EXTREME_LONG_STRING_LENGTH, s.length());
+			}
+		} catch (Exception e){
+			logger.error(getClassName() + ".shortenLongString() - s =" + s, e);
+			throw e;
+		}
+		return s;
+	}
+	
+//	public void compressBytes(ByteArrayOutputStream outByteArrayOutputStream, List<CompressFileDto>  compressFileDtoList) throws Exception {
+//		ZipOutputStream zos = null;
+//		try{
+//			zos = new ZipOutputStream(outByteArrayOutputStream);
+//			zos.setLevel(ZipOutputStream.STORED);
+//			for (int i = 0; i < compressFileDtoList.size(); i++) {
+//				CompressFileDto compressFileDto = compressFileDtoList.get(i);
+//				ByteArrayOutputStream baos = compressFileDto.getByteArrayOutputStream();
+//				String fileName = compressFileDto.getFileName();
+//				ZipEntry zipEntry = new ZipEntry(fileName);
+//				zos.putNextEntry(zipEntry);
+//				zos.write(baos.toByteArray());
+//				zos.closeEntry();
+//			}
+//			
+//		} catch (Exception e){
+//			logger.error(getClassName() + ".compressBytes()");
+//			throw e;
+//		} finally {
+//			if (zos != null) {
+//				zos.close();
+//				
+//			}
+//		}
+//		
+//	}
 //	public void compressBytes(ByteArrayOutputStream outByteArrayOutputStream, List<ByteArrayOutputStream> inputByteArrayOutputStreamList) throws Exception {
 //		ZipOutputStream zos = null;
 //		try{
@@ -455,4 +576,84 @@ public class CommonUtils {
 //			}
 //		}
 //	}
+	
+	public Double roundUpToCeiling(Double input, Integer decimalPlace) throws Exception {
+		Double output = null;
+		BigDecimal midConvertBd = null;
+		try{
+			if (input != null) {
+				midConvertBd = new BigDecimal(input);
+				if (midConvertBd != null) {
+					output = midConvertBd.setScale(decimalPlace, RoundingMode.CEILING).doubleValue();
+				}
+			}
+		} catch (Exception e){
+			logger.error(getClassName() + ".convertClobToCharArray() - input =" + input + ",decimalPlace=" + decimalPlace, e);
+			throw e;
+		} finally {
+			if (midConvertBd != null) {
+				midConvertBd = null;
+			}
+		}
+	    return output;
+	}
+	
+	public Double roundUpInTermOfHalfUp(Double input, Integer decimalPlace) throws Exception {
+		Double output = null;
+		BigDecimal midConvertBd = null;
+		try{
+			if (input != null) {
+				midConvertBd = new BigDecimal(input);
+				if (midConvertBd != null) {
+					output = midConvertBd.setScale(decimalPlace, RoundingMode.HALF_UP).doubleValue();
+				}
+			}
+		} catch (Exception e){
+			logger.error(getClassName() + ".convertClobToCharArray() - input =" + input + ",decimalPlace=" + decimalPlace, e);
+			throw e;
+		} finally {
+			if (midConvertBd != null) {
+				midConvertBd = null;
+			}
+		}
+	    return output;
+	}
+	
+	public String getIpAddress() throws Exception {
+		String ip = null;
+		try {
+			InetAddress inetAddress = InetAddress.getLocalHost();
+			ip = inetAddress.getHostAddress();
+		} catch (Exception e) {
+			logger.error(getClassName() + ".getIpAddress()", e);
+			throw e;
+		}
+		return ip;
+	}
+	
+	public String getHostName() throws Exception {
+		String hostName = null;
+		try {
+			InetAddress inetAddress = InetAddress.getLocalHost();
+			hostName = inetAddress.getHostName();
+		} catch (Exception e) {
+			logger.error(getClassName() + ".getHostName()", e);
+			throw e;
+		}
+		return hostName;
+	}
+	
+	public String trimClassName(String s) throws Exception {
+		String rtn = null;
+		try {
+			if (s != null) {
+				String[] split = s.split("\\.");
+				rtn = split[split.length - 1];
+			}
+		} catch (Exception e) {
+			logger.error(getClassName() + ".trimClassName() - s" + s, e);
+			throw e;
+		}
+		return rtn;
+	}
 }
